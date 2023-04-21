@@ -9,6 +9,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link rel="stylesheet" href="main.css">
     <script src="tooltip.js"></script>
     <script src="confirm-link.js"></script>
 </head>
@@ -17,9 +18,16 @@
     
     <main>
         <article>
-            <p><uc-tooltip text="Jojojojo">¡Que hongo!</uc-tooltip></p>
-            <p><uc-tooltip>Ooooooralee....</uc-tooltip></p>
-            <p><uc-tooltip></uc-tooltip></p>
+            <p><uc-tooltip text="Jojojojo">
+                <span>¡Que hongo!</span>
+            </uc-tooltip></p>
+            <p><uc-tooltip class="danger">Ooooooralee....</uc-tooltip></p>
+            <h1><uc-tooltip></uc-tooltip></h1>
+
+            <h1>
+                <uc-tooltip text="En serio!!">Soy un Título</uc-tooltip>
+            </h1>
+
             <p><a is="uc-a-confirm" href="#">Link!!</a></p>
         </article>
     </main>

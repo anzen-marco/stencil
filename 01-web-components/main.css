@@ -1,0 +1,18 @@
+:root {
+    --color-danger: red;
+    --color-prim: #00659f;
+    --color-prim-ll: #a9defd;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+uc-tooltip {}
+
+uc-tooltip span {
+    display: inline-block;
+    padding: 16px;
+    background: var(--color-prim-ll);
+}
