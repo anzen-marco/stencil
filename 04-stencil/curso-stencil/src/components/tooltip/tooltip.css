@@ -1,9 +1,45 @@
 .text {
     position: relative;
 }
-.icon, span {
+.tooltip {
+    position: relative;
     display: inline-block;
-    padding: 8px;
+}
+
+.icon {
+    display: block;
+    padding-top: 5px;
+    width: 28px;
+    height: 24px;
     background: #000000;
+    color: #ffffff;
+    text-align: center;
     border-radius: 50%;
+    cursor: pointer;
+    transition: all .3s;
+}
+
+.icon:hover {
+    background: #474747;
+    transition: all .3s;
+}
+
+.message {
+    position: absolute;
+    top: 0px;
+    left: 38px;
+    padding: 8px;
+    min-width: 128px;
+    background: #000000;
+    color: #ffffff;
+    text-align: center;
+    font-size: .85rem;
+    opacity: 0;
+    transition: all .3s;
+    pointer-events: none;
+}
+
+.show {
+    opacity: 1;
+    transition: all .3s;
 }
