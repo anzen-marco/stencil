@@ -1,4 +1,4 @@
-import { Component, State, h, Element, Prop, Watch } from "@stencil/core";
+import { Component, State, h, Element, Prop, Watch, Listen } from "@stencil/core";
 import { apiKey } from "../../global/global.js";
 
 @Component({
@@ -12,14 +12,20 @@ export class StockPrice {
     @State() userInput: string;
     @State() inputInvalid = false;
     @State() errorMessage: string;
+    @State() loading = false;
 
     @Prop({
         mutable: true,
         //reflectToAttr: true
-    }) stock: string;
+    }) stockSymbol: string;
 
-    @Watch('stock')
-    stockChange() {
+    @Watch('stockSymbol')
+    stockChange( newValue: string, oldValue: string) {
+        if ( newValue != oldValue ) {
+            this.userInput = newValue;
+            this.inputInvalid = true;
+            // this.onFetchPrice( newValue );
+        }
         console.log('Cambio la popiedad de stock');
     }
 
@@ -33,16 +39,30 @@ export class StockPrice {
         this.userInput.trim() !== '' ? this.inputInvalid = true : this.inputInvalid = false;
     };
 
-    async onFetchPrice(event: Event) {
+    @Listen('ucSymbolSelected', { target: 'body' })
+    symbolSeleceted( event: CustomEvent ) {
+        ( event.detail && event.detail !== this.stockSymbol ) && ( this.stockSymbol = event.detail )
+    }
+
+    async onFetchPrice( event: Event ) {
         event.preventDefault();
+        this.loading = true;
 
         //Acceder al valor con querySelector
         // const stockSymbol = (this.el.shadowRoot.querySelector('#stock-symbol') as HTMLInputElement).value;
 
-        const stockSymbol = this.stockInput.value; 
+        let stock = this.stockInput.value;
+
+        // let stock: string;
+
+        // if ( symbol ) {
+        //     stock = symbol;
+        // } else {
+        //     stock = this.stockInput.value;
+        // }
 
         try {
-            const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stockSymbol}&apikey=${apiKey}`);
+            const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stock}&apikey=${apiKey}`);
 
             if ( response.status !== 200 ) {
                 throw new Error('Conexión fallida o errónea u___u');
@@ -57,8 +77,10 @@ export class StockPrice {
             
             this.errorMessage = null;
             this.price = await fullRes;
+            this.loading = false;
         } catch (error) {
             this.errorMessage = error.message;
+            this.loading = false;
         }
     }
 
@@ -70,6 +92,12 @@ export class StockPrice {
     // Cuando el componente ya se cargó
     componentDidLoad() {
         console.log('Did load');
+
+        if ( this.stockSymbol ) {
+            // this.stockInput = this.stockSymbol;
+            this.inputInvalid = true;
+            // this.onFetchPrice(this.stockSymbol);
+        }
     }
 
     componentWillUpdate() {
@@ -81,14 +109,23 @@ export class StockPrice {
     }
 
     // Cuando el componente se quita del DOM
-    componentDidUnload() {
-        console.log('Did unload');
-    }
+    // componentDidUnload() {
+    //     console.log('Did unload');
+    // }
+
+    // hostData() {
+    //     return {
+    //         class: this.error ? 'error' : ''
+    //     };
+    // }
 
     render() {
-        let errorText ='';
+        let errorText =''; 
+        let spinner;
 
+        this.loading ? spinner = <uc-spinner></uc-spinner> : spinner = '';
         this.errorMessage ? errorText = this.errorMessage : errorText = '';
+        
         
         console.log(errorText);
 
@@ -104,10 +141,12 @@ export class StockPrice {
                     />
                     <button
                         type="submit"
-                        disabled={!this.inputInvalid}
+                        disabled={ !this.inputInvalid || this.loading }
                     >
                         Obtener
                     </button>
+
+                    <span>{ spinner }</span>
                 </form>
                 
 

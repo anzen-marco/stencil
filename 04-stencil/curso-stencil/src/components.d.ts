@@ -26,12 +26,20 @@ export namespace Components {
         "opened": boolean;
         "title": string;
     }
+    interface UcSpinner {
+    }
+    interface UcStockFinder {
+    }
     interface UcStockPrice {
-        "stock": string;
+        "stockSymbol": string;
     }
     interface UcTooltip {
         "tooltip": string;
     }
+}
+export interface UcStockFinderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUcStockFinderElement;
 }
 declare global {
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
@@ -45,6 +53,18 @@ declare global {
     var HTMLUcMenuElement: {
         prototype: HTMLUcMenuElement;
         new (): HTMLUcMenuElement;
+    };
+    interface HTMLUcSpinnerElement extends Components.UcSpinner, HTMLStencilElement {
+    }
+    var HTMLUcSpinnerElement: {
+        prototype: HTMLUcSpinnerElement;
+        new (): HTMLUcSpinnerElement;
+    };
+    interface HTMLUcStockFinderElement extends Components.UcStockFinder, HTMLStencilElement {
+    }
+    var HTMLUcStockFinderElement: {
+        prototype: HTMLUcStockFinderElement;
+        new (): HTMLUcStockFinderElement;
     };
     interface HTMLUcStockPriceElement extends Components.UcStockPrice, HTMLStencilElement {
     }
@@ -61,6 +81,8 @@ declare global {
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
         "uc-menu": HTMLUcMenuElement;
+        "uc-spinner": HTMLUcSpinnerElement;
+        "uc-stock-finder": HTMLUcStockFinderElement;
         "uc-stock-price": HTMLUcStockPriceElement;
         "uc-tooltip": HTMLUcTooltipElement;
     }
@@ -84,8 +106,13 @@ declare namespace LocalJSX {
         "opened"?: boolean;
         "title"?: string;
     }
+    interface UcSpinner {
+    }
+    interface UcStockFinder {
+        "onUcSymbolSelected"?: (event: UcStockFinderCustomEvent<string>) => void;
+    }
     interface UcStockPrice {
-        "stock"?: string;
+        "stockSymbol"?: string;
     }
     interface UcTooltip {
         "tooltip"?: string;
@@ -93,6 +120,8 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "my-component": MyComponent;
         "uc-menu": UcMenu;
+        "uc-spinner": UcSpinner;
+        "uc-stock-finder": UcStockFinder;
         "uc-stock-price": UcStockPrice;
         "uc-tooltip": UcTooltip;
     }
@@ -103,6 +132,8 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
             "uc-menu": LocalJSX.UcMenu & JSXBase.HTMLAttributes<HTMLUcMenuElement>;
+            "uc-spinner": LocalJSX.UcSpinner & JSXBase.HTMLAttributes<HTMLUcSpinnerElement>;
+            "uc-stock-finder": LocalJSX.UcStockFinder & JSXBase.HTMLAttributes<HTMLUcStockFinderElement>;
             "uc-stock-price": LocalJSX.UcStockPrice & JSXBase.HTMLAttributes<HTMLUcStockPriceElement>;
             "uc-tooltip": LocalJSX.UcTooltip & JSXBase.HTMLAttributes<HTMLUcTooltipElement>;
         }
